@@ -36,7 +36,7 @@ namespace dashboard_budget.HttpTriggers.UserDashboardTrigger
             };
 
             int id = 4;
-
+            // Funcionando
             //UserDashboard userCreated = _userRepository.Create(userDashboard);
 
             UserDashboard userCreated = _userRepository.Get(id);
