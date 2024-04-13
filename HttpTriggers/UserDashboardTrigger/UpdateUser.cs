@@ -1,34 +1,39 @@
-using InfraestructureDB.Repository;
+﻿using ApplicationServices.UserServices;
+using dashboard_budget.DTOs;
+using DomainModel.User;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
-using DomainModel.User;
-using dashboard_budget.DTOs;
-using ApplicationServices.UserServices;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace dashboard_budget.HttpTriggers.UserDashboardTrigger
 {
-    public class CreateUser
+    public class UpdateUser
     {
-        private readonly ILogger<CreateUser> _logger;
+        private readonly ILogger<UpdateUser> _logger;
         private readonly IUserService userService;
 
-        public CreateUser(ILogger<CreateUser> logger, IUserService service)
+        public UpdateUser(ILogger<UpdateUser> logger, IUserService service)
         {
             _logger = logger;
             userService = service;
         }
 
-        [Function("CreateUser")]
-        public IActionResult Run([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequest req, [FromBody] UserDashboardDTO body)
+        [Function("UpdateUser")]
+        public IActionResult Run([HttpTrigger(AuthorizationLevel.Function, "put")] HttpRequest req, [FromBody] UserDashboardDTO body)
         {
             DateTime dateTime = DateTime.UtcNow;
 
-            _logger.LogInformation("CreateUser Function HTTP Trigger | Start");
+            _logger.LogInformation("UpdateUser Function HTTP Trigger | Start");
 
             UserDashboard userDashboard = new UserDashboard()
             {
+                Id = string.IsNullOrEmpty(body.Id) ? 0 : Convert.ToInt32(body.Id),
                 Name = body.Name,
                 Email = string.IsNullOrEmpty(body.Email) ? string.Empty : body.Email,
                 Password = string.IsNullOrEmpty(body.Password) ? string.Empty : body.Password,
@@ -37,18 +42,18 @@ namespace dashboard_budget.HttpTriggers.UserDashboardTrigger
                 Address = body.Address,
                 City = body.City,
                 Country = body.Country,
-                Age =  Convert.ToInt32(body.Age),
+                Age = Convert.ToInt32(body.Age),
                 CreatedBy = body.CreatedBy
             };
 
-            UserDashboard user = userService.CreateUserDashboard(userDashboard);
+            UserDashboard user = userService.UpdateUserDashboard(userDashboard);
 
             if (UserDashboard.IsNullOrNew(user))
             {
                 return new BadRequestResult();
             }
 
-            _logger.LogInformation($"CreateUser Function HTTP Trigger | End | ExecutionTime: {dateTime.ToString()}");
+            _logger.LogInformation($"UpdateUser Function HTTP Trigger | End | ExecutionTime: {dateTime.ToString()}");
             return new OkObjectResult(user);
         }
     }
