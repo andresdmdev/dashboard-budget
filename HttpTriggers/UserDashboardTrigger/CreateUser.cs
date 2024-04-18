@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using DomainModel.User;
 using dashboard_budget.DTOs;
 using ApplicationServices.UserServices;
+using CrossCutting;
 
 namespace dashboard_budget.HttpTriggers.UserDashboardTrigger
 {
@@ -41,15 +42,15 @@ namespace dashboard_budget.HttpTriggers.UserDashboardTrigger
                 CreatedBy = body.CreatedBy
             };
 
-            UserDashboard user = userService.CreateUserDashboard(userDashboard);
+            ServiceResponse<UserDashboard> response = userService.CreateUserDashboard(userDashboard);
 
-            if (UserDashboard.IsNullOrNew(user))
+            if (!response.IsSucess || UserDashboard.IsNullOrNew(response.Entity))
             {
-                return new BadRequestResult();
+                return new BadRequestObjectResult(response);
             }
 
             _logger.LogInformation($"CreateUser Function HTTP Trigger | End | ExecutionTime: {dateTime.ToString()}");
-            return new OkObjectResult(user);
+            return new OkObjectResult(response);
         }
     }
 }
