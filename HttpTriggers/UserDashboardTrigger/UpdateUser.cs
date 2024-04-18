@@ -1,4 +1,5 @@
 ﻿using ApplicationServices.UserServices;
+using CrossCutting;
 using dashboard_budget.DTOs;
 using DomainModel.User;
 using Microsoft.AspNetCore.Http;
@@ -46,15 +47,15 @@ namespace dashboard_budget.HttpTriggers.UserDashboardTrigger
                 CreatedBy = body.CreatedBy
             };
 
-            UserDashboard user = userService.UpdateUserDashboard(userDashboard);
+            ServiceResponse<UserDashboard> response = userService.UpdateUserDashboard(userDashboard);
 
-            if (UserDashboard.IsNullOrNew(user))
+            if (!response.IsSucess || UserDashboard.IsNullOrNew(response.Entity))
             {
                 return new BadRequestResult();
             }
 
             _logger.LogInformation($"UpdateUser Function HTTP Trigger | End | ExecutionTime: {dateTime.ToString()}");
-            return new OkObjectResult(user);
+            return new OkObjectResult(response);
         }
     }
 }
