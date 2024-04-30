@@ -5,6 +5,7 @@ using DomainModel.User;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 
 namespace dashboard_budget.HttpTriggers.UserDashboardTrigger
@@ -21,28 +22,22 @@ namespace dashboard_budget.HttpTriggers.UserDashboardTrigger
         }
 
         [Function("DeleteUser")]
-        public IActionResult Run([HttpTrigger(AuthorizationLevel.Function, "delete")] HttpRequest req, [FromBody] UserDashboardDTO body)
+        public IActionResult Run([HttpTrigger(AuthorizationLevel.Function, "delete")] HttpRequestData req)
         {
             DateTime dateTime = DateTime.UtcNow;
 
             _logger.LogInformation("DeleteUser Function HTTP Trigger | Start");
 
-            UserDashboard userDashboard = new UserDashboard()
-            {
-                Id = string.IsNullOrEmpty(body.Id) ? 0 : Convert.ToInt32(body.Id),
-                Name = body.Name,
-                Email = string.IsNullOrEmpty(body.Email) ? string.Empty : body.Email,
-                Password = string.IsNullOrEmpty(body.Password) ? string.Empty : body.Password,
-                Status = UserStatus.Active,
-                MobilePhone = body.MobilePhone,
-                Address = body.Address,
-                City = body.City,
-                Country = body.Country,
-                Age = Convert.ToInt32(body.Age),
-                CreatedBy = body.CreatedBy
-            };
+            int userId = !string.IsNullOrEmpty(req.Query["id"]) ? Convert.ToInt32(req.Query["id"]) : 0;
 
-            ServiceResponse<bool> isDeleted = userService.DeleteUserDashboard(userDashboard);
+            string? deleteBy = !string.IsNullOrEmpty(req.Query["deleteBy"]) ? req.Query["deleteBy"] : "";
+
+            if (userId == 0)
+            {
+                _logger.LogError("DeleteUser Function HTTP Trigger | Id is null");
+            }
+
+            ServiceResponse<bool> isDeleted = userService.DeleteUserDashboard(userId, deleteBy ?? "");
 
             if (!isDeleted.IsSucess || !isDeleted.Entity)
             {
@@ -50,7 +45,7 @@ namespace dashboard_budget.HttpTriggers.UserDashboardTrigger
             }
 
             _logger.LogInformation($"DeleteUser Function HTTP Trigger | End | ExecutionTime: {dateTime.ToString()}");
-            return new OkObjectResult(isDeleted);
+            return new OkObjectResult(isDeleted.Entity);
         }
     }
 }

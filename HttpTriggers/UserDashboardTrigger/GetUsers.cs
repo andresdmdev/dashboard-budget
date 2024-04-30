@@ -24,13 +24,13 @@ namespace dashboard_budget.HttpTriggers.UserDashboardTrigger
         {
             DateTime dateTime = DateTime.UtcNow;
 
-            _logger.LogInformation("CreateUser Function HTTP Trigger | Start");
+            _logger.LogInformation("GetUser Function HTTP Trigger | Start");
 
             int userId = !string.IsNullOrEmpty(req.Query["id"]) ? Convert.ToInt32(req.Query["id"]) : 0;
 
             if(userId == 0)
             {
-                _logger.LogError("CreateUser Function HTTP Trigger | Id is null");
+                _logger.LogError("GetUser Function HTTP Trigger | Id is null");
             }
 
             ServiceResponse<UserDashboard> response = userService.GetUserDashboard(userId);
@@ -40,7 +40,7 @@ namespace dashboard_budget.HttpTriggers.UserDashboardTrigger
                 return new BadRequestObjectResult(response);
             }
 
-            _logger.LogInformation($"CreateUser Function HTTP Trigger | End | ExecutionTime: {dateTime.ToString()}");
+            _logger.LogInformation($"GetUser Function HTTP Trigger | End | ExecutionTime: {dateTime.ToString()}");
             return new OkObjectResult(response.Entity);
         }
     }
