@@ -1,10 +1,9 @@
 using ApplicationServices.UserServices;
 using CrossCutting;
-using dashboard_budget.DTOs;
 using DomainModel.User;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 
 namespace dashboard_budget.HttpTriggers.UserDashboardTrigger
@@ -20,28 +19,21 @@ namespace dashboard_budget.HttpTriggers.UserDashboardTrigger
             userService = service;
         }
 
-        [Function("GetUsers")]
-        public IActionResult Run([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequest req, [FromBody] UserDashboardDTO body)
+        [Function("GetUser")]
+        public IActionResult Run([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req)
         {
             DateTime dateTime = DateTime.UtcNow;
 
             _logger.LogInformation("CreateUser Function HTTP Trigger | Start");
 
-            UserDashboard userDashboard = new UserDashboard()
-            {
-                Name = body.Name,
-                Email = string.IsNullOrEmpty(body.Email) ? string.Empty : body.Email,
-                Password = string.IsNullOrEmpty(body.Password) ? string.Empty : body.Password,
-                Status = UserStatus.Active,
-                MobilePhone = body.MobilePhone,
-                Address = body.Address,
-                City = body.City,
-                Country = body.Country,
-                Age = Convert.ToInt32(body.Age),
-                CreatedBy = body.CreatedBy
-            };
+            int userId = !string.IsNullOrEmpty(req.Query["id"]) ? Convert.ToInt32(req.Query["id"]) : 0;
 
-            ServiceResponse<UserDashboard> response = userService.GetUserDashboard(userDashboard.Id);
+            if(userId == 0)
+            {
+                _logger.LogError("CreateUser Function HTTP Trigger | Id is null");
+            }
+
+            ServiceResponse<UserDashboard> response = userService.GetUserDashboard(userId);
 
             if (!response.IsSucess || UserDashboard.IsNullOrNew(response.Entity))
             {
@@ -49,7 +41,7 @@ namespace dashboard_budget.HttpTriggers.UserDashboardTrigger
             }
 
             _logger.LogInformation($"CreateUser Function HTTP Trigger | End | ExecutionTime: {dateTime.ToString()}");
-            return new OkObjectResult(response);
+            return new OkObjectResult(response.Entity);
         }
     }
 }
