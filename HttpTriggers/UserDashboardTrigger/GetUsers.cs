@@ -37,7 +37,7 @@ namespace dashboard_budget.HttpTriggers.UserDashboardTrigger
 
             if (!response.IsSucess || UserDashboard.IsNullOrNew(response.Entity))
             {
-                return new BadRequestObjectResult(response);
+                return new BadRequestObjectResult(false);
             }
 
             _logger.LogInformation($"GetUser Function HTTP Trigger | End | ExecutionTime: {dateTime.ToString()}");
