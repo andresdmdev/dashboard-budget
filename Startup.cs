@@ -1,3 +1,4 @@
+using ApplicationServices.UserServices;
 using InfraestructureDB.Context;
 using InfraestructureDB.Repository;
 using Microsoft.Azure.Functions.Worker;
@@ -13,14 +14,6 @@ var host = new HostBuilder()
         services.AddApplicationInsightsTelemetryWorkerService();
         services.ConfigureFunctionsApplicationInsights();
         services.AddLogging();
-        //services.AddDbContext<DashboardDBContext>(options =>
-        //{
-        //    string accountEndPoint = Environment.GetEnvironmentVariable("AccountEndpoint");
-        //    string accountKey = Environment.GetEnvironmentVariable("AccountKey");
-        //    string dbName = Environment.GetEnvironmentVariable("DbName");
-
-        //    options.UseCosmos(accountEndPoint, accountKey, dbName);
-        //});
 
         string connection = Environment.GetEnvironmentVariable("AZURE_SQL_CONNECTIONSTRING");
 
@@ -29,7 +22,7 @@ var host = new HostBuilder()
         );
 
         services.AddScoped<IUserRepository, UserRepository>();
-
+        services.AddScoped<IUserService, UserService>();
     })
     .Build();
 

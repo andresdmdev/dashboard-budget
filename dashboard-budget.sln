@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34309.116
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dashboard-budget", "dashboard-budget.csproj", "{09B6E76A-D0E4-479E-8E0F-169ECEC31FA9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dashboard-budget", "dashboard-budget.csproj", "{09B6E76A-D0E4-479E-8E0F-169ECEC31FA9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainModel", "..\Infraestructure\DomainModel.csproj", "{5117E25F-AF25-4C1A-B5A0-CE8BABFB1E4E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DomainModel", "..\Infraestructure\DomainModel.csproj", "{5117E25F-AF25-4C1A-B5A0-CE8BABFB1E4E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplicationServices", "..\ApplicationServices\ApplicationServices.csproj", "{951A5451-21A5-41AB-A2C4-79959469CC60}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApplicationServices", "..\ApplicationServices\ApplicationServices.csproj", "{951A5451-21A5-41AB-A2C4-79959469CC60}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InfraestructureDB", "..\InfraestructureDB\InfraestructureDB.csproj", "{E402CC9A-F700-4B63-9911-E702DD26AD97}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InfraestructureDB", "..\InfraestructureDB\InfraestructureDB.csproj", "{E402CC9A-F700-4B63-9911-E702DD26AD97}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrossCutting", "..\CrossCutting\CrossCutting.csproj", "{68FE1634-F524-4D51-9B43-996B645C8305}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrossCutting", "..\CrossCutting\CrossCutting.csproj", "{68FE1634-F524-4D51-9B43-996B645C8305}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
