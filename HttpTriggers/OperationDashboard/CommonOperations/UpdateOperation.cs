@@ -1,3 +1,5 @@
+using ApplicationServices.OperationServices;
+using ApplicationServices.UserServices;
 using CrossCutting;
 using dashboard_budget.DTOs.Operation;
 using DomainModel.Operation;
@@ -8,31 +10,37 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
+using System;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Xml.Linq;
-using ApplicationServices.OperationServices;
 
 namespace dashboard_budget.HttpTriggers.OperationDashboard.CommonOperations
 {
-    public class CreateOperation
+    public class UpdateOperation
     {
-        private readonly ILogger<CreateOperation> _logger;
+        private readonly ILogger<UpdateOperation> _logger;
         private readonly IOperationService operationService;
 
-        public CreateOperation(ILogger<CreateOperation> logger, IOperationService operation)
+        public UpdateOperation(ILogger<UpdateOperation> logger, IOperationService operation)
         {
             _logger = logger;
             operationService = operation;
         }
 
-        [Function("CreateOperation")]
-        public IActionResult Run([HttpTrigger(AuthorizationLevel.Function, "post", Route = "operation/create")] HttpRequest req, [FromBody] OperationDashboardDTO body)
+        [Function("UpdateOperation")]
+        public IActionResult Run([HttpTrigger(AuthorizationLevel.Function,"put", Route = "operation/update")] HttpRequest req, [FromBody] OperationDashboardDTO body)
         {
             DateTime dateTime = DateTime.UtcNow;
 
-            _logger.LogInformation("CreateOperation Function HTTP Trigger | Start");
+            _logger.LogInformation("UpdateOperation Function HTTP Trigger | Start");
 
-            Operation userDashboard = new Operation()
+            if(body == null || body.Id == 0)
+            {
+                _logger.LogInformation("UpdateOperation | Body is null");
+                return new BadRequestResult();
+            }
+
+            Operation operationDashboard = new Operation()
             {
                 Id = body.Id,
                 UserId = body.UserId,
@@ -47,17 +55,18 @@ namespace dashboard_budget.HttpTriggers.OperationDashboard.CommonOperations
                 QuoteNumber = body.QuoteNumber,
                 PaidDestination = body.PaidDestination,
                 PaidMethod = body.PaidMethod,
-                CreatedBy = body.CreatedBy
+                UpdatedBy = body.UpdatedBy,
+                UpdatedDate = dateTime,
             };
 
-            ServiceResponse<Operation> response = operationService.CreateOperationDashboard(userDashboard);
+            ServiceResponse<Operation> response = operationService.UpdateOperationDashboard(operationDashboard);
 
-            if (!response.IsSucess || UserDashboard.IsNullOrNew(response.Entity))
+            if (!response.IsSucess || Operation.IsNullOrNew(response.Entity))
             {
-                return new BadRequestObjectResult(response);
+                return new BadRequestResult();
             }
 
-            _logger.LogInformation($"CreateOperation Function HTTP Trigger | End | ExecutionTime: {dateTime.ToString()}");
+            _logger.LogInformation($"UpdateOperation Function HTTP Trigger | End | ExecutionTime: {dateTime.ToString()}");
             return new OkObjectResult(response);
         }
     }
