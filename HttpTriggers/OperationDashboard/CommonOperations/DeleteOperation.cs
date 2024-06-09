@@ -33,6 +33,7 @@ namespace dashboard_budget.HttpTriggers.OperationDashboard.CommonOperations
             if (operationId == 0)
             {
                 _logger.LogError("GetOperation Function HTTP Trigger | Id is null");
+                return new BadRequestResult();
             }
 
             ServiceResponse<bool> isDeleted = operationService.DeleteOperationDashboard(operationId, deleteBy ?? "");
