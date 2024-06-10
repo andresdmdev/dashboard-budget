@@ -27,16 +27,29 @@ namespace dashboard_budget.HttpTriggers.OperationDashboard.CommonOperations
             _logger.LogInformation("GetOperationsOfLastDays Function HTTP Trigger | Start");
 
             int userId = !string.IsNullOrEmpty(req.Query["userId"]) ? Convert.ToInt32(req.Query["userId"]) : 0;
-
-            int daysToSearch = !string.IsNullOrEmpty(req.Query["daysToSearch"]) ? Convert.ToInt32(req.Query["daysToSearch"]) : 1;
-
+            
             if (userId <= 0)
             {
                 _logger.LogInformation("GetOperationsOfLastDays | User id is not valid");
                 return new BadRequestResult();
             }
 
-            ServiceResponse<List<Operation>> response = operationService.GetOperationsOfLastDays(userId, daysToSearch);
+            DateTime dateToSearch;
+
+            ServiceResponse<List<Operation>> response;
+
+            if (!string.IsNullOrEmpty(req.Query["dateToSearch"]) && DateTime.TryParse(req.Query["dateToSearch"], out dateToSearch))
+            {
+                _logger.LogInformation($"GetOperationsOfLastDays | Datetime: {dateToSearch}");
+
+                response = operationService.GetOperationsOfLastDays(userId, dateToSearch);
+            }
+            else
+            {
+                int daysToSearch = !string.IsNullOrEmpty(req.Query["daysToSearch"]) ? Convert.ToInt32(req.Query["daysToSearch"]) : 1;
+
+                response = operationService.GetOperationsOfLastDays(userId, daysToSearch);
+            }
 
             if (!response.IsSucess)
             {
