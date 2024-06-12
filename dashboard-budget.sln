@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InfraestructureDB", "..\Inf
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrossCutting", "..\CrossCutting\CrossCutting.csproj", "{68FE1634-F524-4D51-9B43-996B645C8305}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DashboardBudgetTest", "..\DashboardBudgetTest\DashboardBudgetTest.csproj", "{C9A09825-E0DE-47BE-863F-B63CD419C43C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{68FE1634-F524-4D51-9B43-996B645C8305}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{68FE1634-F524-4D51-9B43-996B645C8305}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{68FE1634-F524-4D51-9B43-996B645C8305}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9A09825-E0DE-47BE-863F-B63CD419C43C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9A09825-E0DE-47BE-863F-B63CD419C43C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9A09825-E0DE-47BE-863F-B63CD419C43C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9A09825-E0DE-47BE-863F-B63CD419C43C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
