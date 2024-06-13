@@ -1,6 +1,7 @@
 ﻿using ApplicationServices.UserServices;
 using Castle.Core.Logging;
 using CrossCutting;
+using DashboardBudgetTest.FakeDataInfo;
 using DomainModel.User;
 using InfraestructureDB.Repository;
 using Microsoft.Azure.Cosmos;
