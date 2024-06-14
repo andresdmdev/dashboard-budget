@@ -35,6 +35,7 @@ namespace dashboard_budget.HttpTriggers.UserDashboardTrigger
             if (userId == 0)
             {
                 _logger.LogError("DeleteUser Function HTTP Trigger | Id is null");
+                return new BadRequestResult();
             }
 
             ServiceResponse<bool> isDeleted = userService.DeleteUserDashboard(userId, deleteBy ?? "");
