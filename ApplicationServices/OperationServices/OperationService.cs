@@ -81,7 +81,7 @@ namespace ApplicationServices.OperationServices
                 {
                     _logger.LogError($"OperationService | GetOperationDashboard | Cannot get operation dashboard or was deleted | Operation: {operationId.ToString()}");
 
-                    return ServiceResponse<Operation>.CreateFailedResponse(operationDashboard);
+                    return ServiceResponse<Operation>.CreateSucessResponse(default(Operation));
                 }
             }
             else
@@ -107,7 +107,7 @@ namespace ApplicationServices.OperationServices
                 int defaultDaysToSearch = daysToSearch == 0 ? 1 : daysToSearch;
                 DateTime dateTimeToSearch = DateTime.Now.AddDays(-defaultDaysToSearch);
 
-                operations = _operationRepository.GetOperationsOfLastDays(userId, dateTimeToSearch);
+                operations = _operationRepository.GetOperationsOfLastDays(userId, dateTimeToSearch.Date);
             }
             else {
                 _logger.LogInformation($"OperationService | GetOperationsOfLastDays | UserId: {userId}");
